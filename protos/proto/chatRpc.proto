@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+option go_package = "github.com/JamezQ/go-grpcServer/protos/proto";
+
+import "protoImport/chat.proto";
+
+message ChannelChat {
+	ChatMessage msg = 1;
+	Channel channel = 2;
+}
+
+message ChannelHistory {
+	repeated ChannelChat msgs = 1;
+}
+
+message Channel {
+	string chName = 1;
+}
+
+message Empty {}
+
+service ChatServer {
+	rpc GetHistory(Empty) returns (ChannelHistory) {}
+
+	rpc ListenChannel(Channel) returns (stream ChannelChat) {}
+
+	rpc ConnectChat(stream ChannelChat) returns (stream ChannelChat) {}
+}
